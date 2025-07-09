@@ -5,6 +5,7 @@ import { media } from 'sanity-plugin-media'
 import { schemaTypes } from './src/schemaTypes'
 import { DemoLogo } from './components/DemoLogo'
 import { structure } from './src/structure'
+import { vercelDeployTool } from './tools/vercelDeploy'
 
 // Environment variables for project configuration
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'your-projectID'
@@ -16,7 +17,7 @@ export default defineConfig({
   icon: DemoLogo,
   projectId,
   dataset,
-  plugins: [ structureTool({ structure }), visionTool(), media() ],
+  plugins: [ structureTool({ structure }), visionTool(), media(), vercelDeployTool() ],
   schema: {
     types: schemaTypes,
   },
