@@ -9,28 +9,28 @@ interface DeployResponse {
 }
 
 export default function VercelDeployTool() {
-  const [isDeploying, setIsDeploying] = useState(false)
-  const [lastDeployment, setLastDeployment] = useState<DeployResponse | null>(null)
+  const [ isDeploying, setIsDeploying ] = useState(false)
+  const [ lastDeployment, setLastDeployment ] = useState<DeployResponse | null>(null)
   const toast = useToast()
-  
+
   // Check if environment variable is available
   const deployHook = process.env.SANITY_STUDIO_VERCEL_DEPLOY_HOOK
   const isConfigured = !!deployHook
 
   const triggerDeploy = async () => {
     setIsDeploying(true)
-    
+
     try {
       const deployHook = process.env.SANITY_STUDIO_VERCEL_DEPLOY_HOOK
-      
+
       // Debug: Log all environment variables that start with SANITY_STUDIO_
       console.log('Debug: Environment variables:')
       Object.keys(process.env).forEach(key => {
         if (key.startsWith('SANITY_STUDIO_')) {
-          console.log(`${key}:`, process.env[key])
+          console.log(`${key}:`, process.env[ key ])
         }
       })
-      
+
       if (!deployHook) {
         throw new Error('SANITY_STUDIO_VERCEL_DEPLOY_HOOK environment variable is not set. Please restart your studio after adding the environment variable.')
       }
@@ -54,7 +54,7 @@ export default function VercelDeployTool() {
           message: 'Deployment triggered successfully!',
           deploymentUrl: result.job?.url
         }
-        
+
         setLastDeployment(deployResponse)
         toast.push({
           status: 'success',
@@ -70,7 +70,7 @@ export default function VercelDeployTool() {
         success: false,
         message: errorMessage
       }
-      
+
       setLastDeployment(deployResponse)
       toast.push({
         status: 'error',
@@ -88,7 +88,7 @@ export default function VercelDeployTool() {
         <Text size={3} weight="semibold">
           Deploy to Vercel
         </Text>
-        
+
         <Text size={2} muted>
           Trigger a deployment of your Astro app with the latest content from Sanity.
         </Text>
@@ -105,9 +105,9 @@ export default function VercelDeployTool() {
         </Flex>
 
         {lastDeployment && (
-          <Card 
-            padding={3} 
-            radius={2} 
+          <Card
+            padding={3}
+            radius={2}
             tone={lastDeployment.success ? 'positive' : 'critical'}
             border
           >
@@ -120,9 +120,9 @@ export default function VercelDeployTool() {
               </Text>
               {lastDeployment.deploymentUrl && (
                 <Text size={1}>
-                  <a 
-                    href={lastDeployment.deploymentUrl} 
-                    target="_blank" 
+                  <a
+                    href={lastDeployment.deploymentUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: 'inherit', textDecoration: 'underline' }}
                   >
@@ -146,12 +146,12 @@ export default function VercelDeployTool() {
                 'Make sure to set your SANITY_STUDIO_VERCEL_DEPLOY_HOOK environment variable in your .env.local file and restart the studio.'
               )}
             </Text>
-            <Text size={1}>
+            {/* <Text size={1}>
               <strong>Debug info:</strong> Environment variables starting with SANITY_STUDIO_:
               {Object.keys(process.env).filter(key => key.startsWith('SANITY_STUDIO_')).map(key => (
                 <div key={key}>{key}: {process.env[key] ? '✅ Set' : '❌ Not set'}</div>
               ))}
-            </Text>
+            </Text> */}
           </Stack>
         </Card>
       </Stack>
