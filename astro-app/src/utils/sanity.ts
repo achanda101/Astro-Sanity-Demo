@@ -18,6 +18,12 @@ export async function getPost(slug: string): Promise<Post> {
   );
 }
 
+export async function getHomepage(): Promise<Homepage | null> {
+  return await sanityClient.fetch(
+    groq`*[_type == "homepage"][0]`
+  );
+}
+
 export interface Post {
   _type: "post";
   _createdAt: string;
@@ -26,4 +32,12 @@ export interface Post {
   excerpt?: string;
   mainImage?: ImageAsset & { alt?: string };
   body: PortableTextBlock[];
+}
+
+export interface Homepage {
+  _type: "homepage";
+  title?: string;
+  subtitle?: string;
+  heroText?: string;
+  description?: PortableTextBlock[];
 }
