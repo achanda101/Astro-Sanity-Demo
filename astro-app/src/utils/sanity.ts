@@ -20,7 +20,7 @@ export async function getPost(slug: string): Promise<Post> {
 
 export async function getHomepage(): Promise<Homepage | null> {
   return await sanityClient.fetch(
-    groq`*[_type == "homepage"][0]`
+    groq`*[_type == "homepage" && _id == "homepage"][0]`
   );
 }
 
