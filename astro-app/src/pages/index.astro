@@ -2,6 +2,7 @@
 import Card from '../components/Card.astro';
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import YouTube from '../components/YouTube.astro';
 import { getPosts, getHomepage } from '../utils/sanity';
 import { PortableText } from 'astro-portabletext';
 
@@ -17,7 +18,11 @@ const homepage = await getHomepage();
 			{homepage.heroText && <p class="hero-text">{homepage.heroText}</p>}
 			{homepage.description && (
 				<div class="description">
-					<PortableText value={homepage.description} />
+					<PortableText value={homepage.description} components={{
+						type: {
+							youtube: YouTube as any
+						}
+					}} />
 				</div>
 			)}
 		</section>

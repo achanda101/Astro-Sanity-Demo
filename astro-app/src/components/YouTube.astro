@@ -1,0 +1,72 @@
+---
+interface Props {
+  node?: {
+    url?: string;
+  };
+  value?: {
+    url?: string;
+  };
+}
+
+const { node, value } = Astro.props;
+
+// Extract video ID from YouTube URL
+function getVideoId(url: string): string | null {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 ? match[2] : null;
+}
+
+// Handle different possible data structures - astro-portabletext passes data in 'node'
+const url = node?.url || value?.url || '';
+const videoId = url ? getVideoId(url) : null;
+---
+
+{videoId ? (
+  <div class="youtube-embed">
+    <iframe
+      src={`https://www.youtube.com/embed/${videoId}`}
+      title="YouTube video player"
+      style="border: 0;"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    />
+  </div>
+) : (
+  <div class="youtube-error">
+    <p>Invalid YouTube URL: {url}</p>
+  </div>
+)}
+
+<style>
+  .youtube-embed {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin: 1.5rem 0;
+  }
+  
+  .youtube-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .youtube-error {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  
+  .youtube-error p {
+    color: #666;
+    margin: 0;
+  }
+</style>
